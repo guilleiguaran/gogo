@@ -13,17 +13,30 @@ $(document).ready(function(){
 
 function boardClick(coord) {
     var stone = Go.board.get(coord);
+    var group = Go.board.getGroup(coord);
 
     if(stone == JGO_CLEAR) {
-        if(Go.turn == true) {
-            Go.board.set(coord, JGO_BLACK);
+        if(Go.board.hasLiberties(group)) {
+            if(Go.turn == true) {
+                Go.board.set(coord, JGO_BLACK);
+            } else {
+                Go.board.set(coord, JGO_WHITE);
+            }
+            Go.turn = !Go.turn;
+            updateBoard();
+        } else {
+            alert('No se permite el suicidio');
         }
-        else {
-            Go.board.set(coord, JGO_WHITE);
-        }
-        Go.turn = !Go.turn;
-    }
-    else {
+    } else {
         alert('La posicion esta ocupada');
     }
+}
+
+function updateBoard() {
+    Go.board.each(function(coord) {
+        var group = Go.board.getGroup(coord);
+        if(!Go.board.hasLiberties(group)) {
+            Go.board.set(coord, JGO_CLEAR);
+        }
+    });
 }
