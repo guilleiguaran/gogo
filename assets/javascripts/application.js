@@ -1,4 +1,5 @@
 var Go = {};
+Go.turn = true;
 
 $(document).ready(function(){
     Go.board = jgo_generateBoard($("#board"));
@@ -13,10 +14,16 @@ $(document).ready(function(){
 function boardClick(coord) {
     var stone = Go.board.get(coord);
 
-    if(stone == JGO_CLEAR)
-      Go.board.set(coord, JGO_BLACK);
-    else if(stone == JGO_BLACK)
-      Go.board.set(coord, JGO_WHITE);
-    else
-      Go.board.set(coord, JGO_CLEAR);
+    if(stone == JGO_CLEAR) {
+        if(Go.turn == true) {
+            Go.board.set(coord, JGO_BLACK);
+        }
+        else {
+            Go.board.set(coord, JGO_WHITE);
+        }
+        Go.turn = !Go.turn;
+    }
+    else {
+        alert('La posicion esta ocupada');
+    }
 }
