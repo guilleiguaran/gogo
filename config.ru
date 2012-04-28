@@ -1,4 +1,8 @@
 require 'sprockets'
+require 'sinatra'
+require 'nest'
+require 'json'
+require './app'
 
 map '/assets' do
   environment = Sprockets::Environment.new
@@ -9,5 +13,5 @@ map '/assets' do
 end
 
 map '/' do
-  run Rack::File.new("public/index.html")
+  run App
 end

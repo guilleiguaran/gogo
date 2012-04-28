@@ -1,4 +1,6 @@
 source :rubygems
 
-gem 'rack'
+gem 'sinatra'
+gem 'nest'
 gem 'sprockets'
+gem 'thin'
