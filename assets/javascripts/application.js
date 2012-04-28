@@ -1,5 +1,4 @@
 var Go = {};
-Go.turn = true;
 
 $(document).ready(function(){
     Go.board = jgo_generateBoard($("#board"));
@@ -12,31 +11,23 @@ $(document).ready(function(){
 
 
 function boardClick(coord) {
+    alert(coord);
     var stone = Go.board.get(coord);
     var group = Go.board.getGroup(coord);
 
     if(stone == JGO_CLEAR) {
-        if(Go.board.hasLiberties(group)) {
-            if(Go.turn == true) {
-                Go.board.set(coord, JGO_BLACK);
+        if(Go.turn == true) {
+            captures = Go.board.play(coord, Go.current);
+            if(captures == -1) {
+                alert('No se permite el suicidio');
             } else {
-                Go.board.set(coord, JGO_WHITE);
+                if(captures > 0) alert('Capturadas '+captures+' piedras');
+                Go.turn = !Go.turn;
             }
-            Go.turn = !Go.turn;
-            updateBoard();
         } else {
-            alert('No se permite el suicidio');
+            alert('No es tu turno de jugar');
         }
     } else {
         alert('La posicion esta ocupada');
     }
-}
-
-function updateBoard() {
-    Go.board.each(function(coord) {
-        var group = Go.board.getGroup(coord);
-        if(!Go.board.hasLiberties(group)) {
-            Go.board.set(coord, JGO_CLEAR);
-        }
-    });
 }
