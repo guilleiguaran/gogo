@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GoGo Game</title>
+
+    <!-- Le styles -->
+    <link href="/assets/application.css" rel="stylesheet">
+    <link href="/assets/jgoboard.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+  </head>
+
+  <body>
+    <h1>Go Game</h1>
+
+    <div class="jgo_board" id="board"></div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/assets/jgoboard.js"></script>
+    <script src="/assets/application.js"></script>
+    <script>
+        Go.current = <%= player %>;
+        Go.moves = <%= moves %>;
+        var even = (Go.moves.size % 2 == 0);
+        Go.turn = (even && Go.current == JGO_BLACK) || (!even && Go.current == JGO_BLACK);
+    </script>
+  </body>
+</html>
