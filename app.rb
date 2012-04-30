@@ -2,11 +2,10 @@ class App < Sinatra::Base
   set connections: {}, game: Nest.new("games")
   enable :sessions, :method_override
 
-
   # New Game form
   get "/games/new" do
     # Show new Game view
-    erb "games/new"
+    erb :"games/new"
   end
 
   # Create a new Game
@@ -18,13 +17,17 @@ class App < Sinatra::Base
     session[:player] = settings.game[id][:players].incr
 
     # Set a connections array for the game
-    settings.connections[game.id] = []
+    settings.connections[id.to_s] = []
+
+    # Redirect to Game
+    redirect "/games/#{id}"
   end
 
   # Show an existing game
   get "/games/:id" do
     # Find the requested game
-    game = settings.game[params[:id]]
+    id = params[:id]
+    game = settings.game[id]
 
     # Get moves of the game
     moves = game[:moves].smembers
@@ -36,7 +39,7 @@ class App < Sinatra::Base
     player = session[:player]
 
     # Show game view
-    erb :"games/show", locals: { player: player, moves: moves.to_json }
+    erb :"games/show", locals: { player: player, moves: moves.to_json, id: id }
   end
 
   # Join to an existing game
@@ -64,7 +67,11 @@ class App < Sinatra::Base
   # Update an existing game (add a move)
   put "/games/:id" do
     # Find the game
-    game = settings.game[params[:id]]
+    id = params[:id]
+    game = settings.game[id]
+
+    # Get what player make the move
+    player = params[:player]
 
     # Get the move sent by user
     move = params[:move]
@@ -72,8 +79,11 @@ class App < Sinatra::Base
     # Save the move in the Game
     game[:moves].sadd(move)
 
-    # Stream the move to the players
-    settings.connections[params[:id]].each { |out| out << "data: #{move}\n\n" }
+    # Setup response
+    response = { player: player, move: move }.to_json
+
+    # Stream the response to the players
+    settings.connections[id].each { |out| out << "data: #{response}\n\n" }
     204
   end
 
@@ -84,6 +94,7 @@ class App < Sinatra::Base
       id = params[:id]
 
       # Add user to connections list
+      settings.connections[id] ||= []
       settings.connections[id] << out
 
       # Delete user on disconnect

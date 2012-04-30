@@ -30,8 +30,10 @@
     <script>
         Go.current = <%= player %>;
         Go.moves = <%= moves %>;
+        Go.gameId = <%= id %>;
         var even = (Go.moves.size % 2 == 0);
         Go.turn = (even && Go.current == JGO_BLACK) || (!even && Go.current == JGO_BLACK);
+        setupStreaming();
     </script>
   </body>
 </html>
