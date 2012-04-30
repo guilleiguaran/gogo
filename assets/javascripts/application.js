@@ -13,24 +13,30 @@ $(document).ready(function(){
 function setupStreaming(){
     Go.source = new EventSource("/games/"+Go.gameId+"/stream");
     Go.source.onmessage = function(event) {
-        console.log(event);
+        var data = JSON.parse(event.data);
+        var player = parseInt(data.player);
+        if(player != Go.current) {
+            var coord = new JGOCoordinate(data.move);
+            var captures = Go.board.play(coord, player);
+            if(captures > 0) alert('Capturadas '+captures+' piedras');
+            Go.turn = true;
+        }
     };
 }
 
 
 function boardClick(coord) {
-    alert(coord);
     var stone = Go.board.get(coord);
 
     if(stone == JGO_CLEAR) {
         if(Go.turn == true) {
-            captures = Go.board.play(coord, Go.current);
+            var captures = Go.board.play(coord, Go.current);
             if(captures == -1) {
                 alert('No se permite el suicidio');
             } else {
                 if(captures > 0) alert('Capturadas '+captures+' piedras');
-                Go.turn = !Go.turn;
-                $.post("/games/"+Go.gameId, { move: coord.copy, player: Go.current, _method: 'put' });
+                $.post("/games/"+Go.gameId, { move: coord.toString(), player: Go.current, _method: 'put' });
+                Go.turn = false;
             }
         } else {
             alert('No es tu turno de jugar');
