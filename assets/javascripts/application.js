@@ -10,9 +10,10 @@ $(document).ready(function(){
     });
 });
 
-function setupStreaming(){
+function streaming(){
     Go.source = new EventSource("/games/"+Go.gameId+"/stream");
-    Go.source.onmessage = function(event) {
+
+    Go.source.addEventListener('gameplay', function(event) {
         var data = JSON.parse(event.data);
         var player = parseInt(data.player);
         if(player != Go.current) {
@@ -21,7 +22,12 @@ function setupStreaming(){
             if(captures > 0) alert('Capturadas '+captures+' piedras');
             Go.turn = true;
         }
-    };
+    }, false);
+
+    Go.source.addEventListener('notice', function(event) {
+        var data = JSON.parse(event.data);
+        console.log(data.message);
+    }, false);
 }
 
 

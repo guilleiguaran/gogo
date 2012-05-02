@@ -58,6 +58,10 @@ class App < Sinatra::Base
 
       # Decrease players count back to two
       game[:players].decr
+    else
+      # Notify to the first player about the join of the second player
+      message = {message: "Player 2 joined to the game"}.to_json
+      settings.connections[id].each { |out| out << event("notice", message) }
     end
 
     # Redirect to Game
@@ -83,7 +87,7 @@ class App < Sinatra::Base
     response = { player: player, move: move }.to_json
 
     # Stream the response to the players
-    settings.connections[id].each { |out| out << "data: #{response}\n\n" }
+    settings.connections[id].each { |out| out << event("gameplay", response) }
     204
   end
 
@@ -99,6 +103,12 @@ class App < Sinatra::Base
 
       # Delete user on disconnect
       out.callback { settings.connections[id].delete(out) }
+    end
+  end
+
+  helpers do
+    def event(name, data)
+      ["event: #{name}\n", "data: #{data}\n\n"].join
     end
   end
 end
