@@ -108,7 +108,10 @@ class App < Sinatra::Base
 
   # Create a new bot for the game
   post "/games/:id/bot" do
-    Process.spawn("#{Dir.pwd}/bin/gogo.rb #{params[:id]}")
+    command = "bundle exec #{Dir.pwd}/bin/gogo.rb #{params[:id]}"
+    puts command
+    pid = Process.spawn(command)
+    puts pid
     204
   end
 

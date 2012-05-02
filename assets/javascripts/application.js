@@ -8,6 +8,11 @@ $(document).ready(function(){
     $("#board").attr('unselectable', 'on').css('-moz-user-select', 'none').each(function() {
         this.onselectstart = function() { return false; };
     });
+
+    $("#enable_bot").live("submit", function(e) {
+        $.post($(this).attr("action"));
+        e.preventDefault();
+    });
 });
 
 function streaming(){
@@ -26,7 +31,7 @@ function streaming(){
 
     Go.source.addEventListener('notice', function(event) {
         var data = JSON.parse(event.data);
-        console.log(data.message);
+        alert(data.message);
     }, false);
 }
 
