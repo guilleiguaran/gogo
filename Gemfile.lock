@@ -1,6 +1,6 @@
 GIT
-  remote: git://github.com/guilleiguaran/go_gtp.git
-  revision: 0e459a006cc30dc9071310c1be2f47627b1be169
+  remote: git://github.com/JEG2/go_gtp.git
+  revision: 5cd5a4de65cb8596eb191b47f77872c4b2b67741
   specs:
     go_gtp (0.0.5.alpha)
 
