@@ -11,7 +11,11 @@ EM.run do
   puts "GNU Go started"
 
   # The url of the game
-  url = "http://localhost:3000/games/#{ARGV[0]}"
+  if ENV["RACK_ENV"] == "production"
+    url = "http://gogogame.herokuapp.com/games/#{ARGV[0]}"
+  else
+    url = "http://localhost:3000/games/#{ARGV[0]}"
+  end
 
   # Setup EventSource
   source = EventMachine::EventSource.new("#{url}/stream",
