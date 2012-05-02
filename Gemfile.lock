@@ -1,10 +1,30 @@
+GIT
+  remote: git://github.com/guilleiguaran/go_gtp.git
+  revision: 0e459a006cc30dc9071310c1be2f47627b1be169
+  specs:
+    go_gtp (0.0.5.alpha)
+
 GEM
   remote: http://rubygems.org/
   specs:
+    addressable (2.2.7)
+    cookiejar (0.3.0)
     daemons (1.1.8)
-    eventmachine (0.12.10)
+    em-eventsource (0.1.7)
+      em-http-request (~> 1.0.0)
+      eventmachine (~> 1.0.0.beta3)
+    em-http-request (1.0.2)
+      addressable (>= 2.2.3)
+      cookiejar
+      em-socksify
+      eventmachine (>= 1.0.0.beta.4)
+      http_parser.rb (>= 0.5.3)
+    em-socksify (0.2.0)
+      eventmachine (>= 1.0.0.beta.4)
+    eventmachine (1.0.0.beta.4)
     hike (1.2.1)
-    multi_json (1.3.2)
+    http_parser.rb (0.5.3)
+    multi_json (1.3.4)
     nest (1.1.1)
       redis
     rack (1.4.1)
@@ -30,6 +50,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  em-eventsource
+  go_gtp!
   nest
   sinatra
   sprockets

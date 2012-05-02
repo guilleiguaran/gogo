@@ -60,7 +60,7 @@ class App < Sinatra::Base
       game[:players].decr
     else
       # Notify to the first player about the join of the second player
-      message = {message: "Player 2 joined to the game"}.to_json
+      message = { message: "Player 2 joined to the game" }.to_json
       settings.connections[id].each { |out| out << event("notice", message) }
     end
 
@@ -104,6 +104,12 @@ class App < Sinatra::Base
       # Delete user on disconnect
       out.callback { settings.connections[id].delete(out) }
     end
+  end
+
+  # Create a new bot for the game
+  post "/games/:id/bot" do
+    Process.spawn("#{Dir.pwd}/bin/gogo.rb #{params[:id]}")
+    204
   end
 
   helpers do
