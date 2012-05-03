@@ -2,6 +2,8 @@
 
 ![Gogo](http://sirenasasesinas.files.wordpress.com/2010/08/gogo.jpg)
 
+## Running Project
+
 ```
 cd gogo
 gem install bundler
