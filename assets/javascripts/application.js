@@ -24,6 +24,7 @@ function streaming(){
         if(player != Go.current) {
             var coord = new JGOCoordinate(data.move);
             var captures = Go.board.play(coord, player);
+            playStoneSound();
             if(captures > 0) alert('Capturadas '+captures+' piedras');
             Go.turn = true;
         }
@@ -45,6 +46,7 @@ function boardClick(coord) {
             if(captures == -1) {
                 alert('No se permite el suicidio');
             } else {
+                playStoneSound();
                 if(captures > 0) alert('Capturadas '+captures+' piedras');
                 $.post("/games/"+Go.gameId, { move: coord.toString(), player: Go.current, _method: 'put' });
                 Go.turn = false;
@@ -54,5 +56,16 @@ function boardClick(coord) {
         }
     } else {
         alert('La posicion esta ocupada');
+    }
+}
+
+function playStoneSound() {
+    try {
+        var sound = $("#stone_sound").get(0);
+        sound.volume = 0.7;
+        sound.currentTime = 0;
+        sound.play();
+    } catch(err) {
+        alert("There was an error attempting to play a sound. Press OK to continue. " + err);
     }
 }
