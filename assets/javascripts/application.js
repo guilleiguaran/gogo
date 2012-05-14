@@ -32,7 +32,7 @@ function streaming(){
             var captures = Go.board.play(coord, player);
             playStoneSound();
             if(captures > 0) {
-                alert('Capturadas '+captures+' piedras');
+                alert_meesage('', 'Capturadas '+captures+' piedras');
                 Go.scores[player] += captures;
                 updateScores();
             }
@@ -42,7 +42,7 @@ function streaming(){
 
     Go.source.addEventListener('notice', function(event) {
         var data = JSON.parse(event.data);
-        alert(data.message);
+        alert_message('', data.message);
     }, false);
 }
 
@@ -54,11 +54,11 @@ function boardClick(coord) {
         if(Go.turn == true) {
             var captures = Go.board.play(coord, Go.current);
             if(captures == -1) {
-                alert('No se permite el suicidio');
+                alert_message('error', 'No se permite el suicidio');
             } else {
                 playStoneSound();
                 if(captures > 0) {
-                    alert('Capturadas '+captures+' piedras');
+                    alert_message('', 'Capturadas '+captures+' piedras');
                     Go.scores[Go.current] += captures;
                     updateScores();
                 }
@@ -66,10 +66,10 @@ function boardClick(coord) {
                 Go.turn = false;
             }
         } else {
-            alert('No es tu turno de jugar');
+            alert_message('error', 'No es tu turno de jugar');
         }
     } else {
-        alert('La posicion esta ocupada');
+        alert_message('error', 'La posicion esta ocupada');
     }
 }
 
@@ -80,11 +80,20 @@ function playStoneSound() {
         sound.load();
         sound.play();
     } catch(err) {
-        alert("There was an error attempting to play a sound. Press OK to continue. " + err);
+        alert_message('error', "There was an error attempting to play a sound. Press OK to continue. " + err);
     }
 }
 
 function updateScores() {
     $("#score_black").html(Go.scores[JGO_BLACK].toString());
     $("#score_white").html(Go.scores[JGO_WHITE].toString());
+}
+
+function alert_message(alertType, msg){
+    var $flash = $("<div class='alert alert-"+alertType+"'><button class='close' data-dismiss='alert'>×</button>"+msg+".</div>").alert();
+    $("#flashes").html($flash);
+
+    setTimeout(function(){
+        $flash.alert('close');
+    }, 2500);
 }
