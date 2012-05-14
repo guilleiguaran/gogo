@@ -7,6 +7,10 @@
       <form action="/games/<%=id %>/bot" method="post" id="enable_bot">
         <input type="submit" value="Play with Gogo Bot" class="btn btn-primary btn-large" />
       </form>
+      <div id="scores">
+        <p>Black: <span id="score_black">0</span></p>
+        <p>White: <span id="score_white">0</span></p>
+      </div>
     </div>
   </div>
 </div>
@@ -24,7 +28,4 @@
     Go.current = <%= player %>;
     Go.moves = <%= moves %>;
     Go.gameId = <%= id %>;
-    var even = (Go.moves.size % 2 == 0);
-    Go.turn = (even && Go.current == JGO_BLACK) || (!even && Go.current == JGO_BLACK);
-    streaming();
 </script>

@@ -1,9 +1,11 @@
 var Go = {};
 
 $(document).ready(function(){
+
     Go.board = jgo_generateBoard($("#board"));
     Go.board.click = boardClick;
     Go.lastMovement = null;
+    Go.scores = [0, 0, 0];
 
     $("#board").attr('unselectable', 'on').css('-moz-user-select', 'none').each(function() {
         this.onselectstart = function() { return false; };
@@ -13,6 +15,10 @@ $(document).ready(function(){
         $.post($(this).attr("action"));
         e.preventDefault();
     });
+
+    var even = (Go.moves.size % 2 == 0);
+    Go.turn = (even && Go.current == JGO_BLACK) || (!even && Go.current == JGO_BLACK);
+    streaming();
 });
 
 function streaming(){
@@ -25,7 +31,11 @@ function streaming(){
             var coord = new JGOCoordinate(data.move);
             var captures = Go.board.play(coord, player);
             playStoneSound();
-            if(captures > 0) alert('Capturadas '+captures+' piedras');
+            if(captures > 0) {
+                alert('Capturadas '+captures+' piedras');
+                Go.scores[player] += captures;
+                updateScores();
+            }
             Go.turn = true;
         }
     }, false);
@@ -47,7 +57,11 @@ function boardClick(coord) {
                 alert('No se permite el suicidio');
             } else {
                 playStoneSound();
-                if(captures > 0) alert('Capturadas '+captures+' piedras');
+                if(captures > 0) {
+                    alert('Capturadas '+captures+' piedras');
+                    Go.scores[Go.current] += captures;
+                    updateScores();
+                }
                 $.post("/games/"+Go.gameId, { move: coord.toString(), player: Go.current, _method: 'put' });
                 Go.turn = false;
             }
@@ -63,9 +77,14 @@ function playStoneSound() {
     try {
         var sound = $("#stone_sound").get(0);
         sound.volume = 0.7;
-        sound.currentTime = 0;
+        sound.load();
         sound.play();
     } catch(err) {
         alert("There was an error attempting to play a sound. Press OK to continue. " + err);
     }
+}
+
+function updateScores() {
+    $("#score_black").val(Go.scores[JGO_BLACK].toString());
+    $("#score_white").val(Go.scores[JGO_WHITE].toString());
 }
