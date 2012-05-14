@@ -32,6 +32,9 @@ class App < Sinatra::Base
     # Get moves of the game
     moves = game[:moves].smembers
 
+    # Get the old chat messages of the game
+    messages = game[:messages].smembers
+
     # Set user as espectator if isn't a player
     session[:player] ||= 0
 
@@ -108,10 +111,35 @@ class App < Sinatra::Base
 
   # Create a new bot for the game
   post "/games/:id/bot" do
+    # Command to run the bot
     command = "bundle exec #{Dir.pwd}/bin/gogo.rb #{params[:id]}"
-    puts command
+
+    # Run command in a new process
     pid = Process.spawn(command)
-    puts pid
+    puts "Bot started with command #{command} and running with pid ##{pid}"
+    204
+  end
+
+  # Update the chat of the game
+  put "/games/:id/chat" do
+    # Find the game
+    id = params[:id]
+    game = settings.game[id]
+
+    # Get what player make the move
+    player = params[:player]
+
+    # Get the move sent by user
+    message = params[:message]
+
+    # Save the move in the Game
+    game[:messages].sadd(message)
+
+    # Setup response
+    response = { player: player, message: message }.to_json
+
+    # Stream the response to the players
+    settings.connections[id].each { |out| out << event("chat", response) }
     204
   end
 
