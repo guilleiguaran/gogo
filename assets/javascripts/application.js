@@ -85,6 +85,6 @@ function playStoneSound() {
 }
 
 function updateScores() {
-    $("#score_black").val(Go.scores[JGO_BLACK].toString());
-    $("#score_white").val(Go.scores[JGO_WHITE].toString());
+    $("#score_black").html(Go.scores[JGO_BLACK].toString());
+    $("#score_white").html(Go.scores[JGO_WHITE].toString());
 }
