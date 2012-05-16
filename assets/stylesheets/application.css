@@ -4,4 +4,9 @@
 
 body{
   padding-top: 30px;
+  background-image: url("/assets/gogoboard.jpg");
+}
+
+h1.main-text{
+  color: white;
 }
