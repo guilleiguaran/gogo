@@ -2,6 +2,9 @@ class App < Sinatra::Base
   set connections: {}, game: Nest.new("games")
   enable :sessions, :method_override
 
+  get "/" do
+    redirect "/games/new"
+  end
   # New Game form
   get "/games/new" do
     # Show new Game view
