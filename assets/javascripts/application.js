@@ -16,6 +16,17 @@ $(document).ready(function(){
         e.preventDefault();
     });
 
+    $("#share_url").val(document.URL+"/join");
+
+    $("#share_url").click(function(){
+        this.select();
+    });
+
+    if(Go.current == 2){
+        $('#enable_bot').hide();
+        $('#share_url').hide();
+    }
+
     var even = (Go.moves.size % 2 == 0);
     Go.turn = (even && Go.current == JGO_BLACK) || (!even && Go.current == JGO_BLACK);
     streaming();
@@ -32,7 +43,7 @@ function streaming(){
             var captures = Go.board.play(coord, player);
             playStoneSound();
             if(captures > 0) {
-                alert_meesage('', 'Capturadas '+captures+' piedras');
+                alert_message('', 'Capturadas '+captures+' piedras');
                 Go.scores[player] += captures;
                 updateScores();
             }
@@ -43,6 +54,13 @@ function streaming(){
     Go.source.addEventListener('notice', function(event) {
         var data = JSON.parse(event.data);
         alert_message('', data.message);
+    }, false);
+
+    Go.source.addEventListener('join', function(event) {
+        var data = JSON.parse(event.data);
+        alert_message('', data.message);
+        $('#enable_bot').hide();
+        $('#share_url').hide();
     }, false);
 }
 

@@ -67,7 +67,7 @@ class App < Sinatra::Base
     else
       # Notify to the first player about the join of the second player
       message = { message: "Player 2 joined to the game" }.to_json
-      settings.connections[id].each { |out| out << event("notice", message) }
+      settings.connections[id].each { |out| out << event("join", message) }
     end
 
     # Redirect to Game

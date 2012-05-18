@@ -1,10 +1,13 @@
 <div class="container">
   <div class="row">
     <div class="span8">
+      <h1 class="main-text">GoGo</h1>
       <div class="jgo_board" id="board"></div>
     </div>
     <div class="span2 offset1">
       <form action="/games/<%=id %>/bot" method="post" id="enable_bot">
+        <label for="share_url" class="white-text">Share with a friend</label>
+        <input type="text" id="share_url" name="share_url"/>
         <input type="submit" value="Play with Gogo Bot" class="btn btn-primary btn-large" />
       </form>
       <div id="scores">
