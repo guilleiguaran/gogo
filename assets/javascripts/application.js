@@ -47,6 +47,7 @@ function streaming(){
                 Go.scores[player] += captures;
                 updateScores();
             }
+            Go.moves.push(coord.toString());
             Go.turn = true;
         }
     }, false);
@@ -80,6 +81,7 @@ function boardClick(coord) {
                     Go.scores[Go.current] += captures;
                     updateScores();
                 }
+                Go.moves.push(coord.toString());
                 $.post("/games/"+Go.gameId, { move: coord.toString(), player: Go.current, _method: 'put' });
                 Go.turn = false;
             }
